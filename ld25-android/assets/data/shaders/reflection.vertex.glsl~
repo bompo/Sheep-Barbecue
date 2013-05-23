@@ -1,0 +1,23 @@
+attribute vec3 a_position;
+attribute vec3 a_normal;
+
+uniform vec4 camPos;
+uniform vec3 camDir;	
+uniform vec3 dirLightDir;
+uniform vec3 dirLightCol;
+uniform mat4 u_projectionViewMatrix;
+uniform mat4 u_modelMatrix;
+
+uniform mat4  MVPMatrix;
+uniform mat3  ModelWorld;
+uniform vec3  EyePosModel;
+varying vec3  v_reflectDir;
+
+void main() {
+	// Transform position
+	gl_Position = u_modelMatrix * u_projectionViewMatrix * vec4(a_position, 1.0);
+	// Calculate eye direction in model space
+	vec3 eyeDir = normalize(a_position - camPos);
+	// reflect eye direction over normal and transform to world space
+	v_reflectDir = ModelWorld * reflect(eyeDir, a_normal);
+}
